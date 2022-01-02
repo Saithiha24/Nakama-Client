@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Nav } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  Button,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 
 const SignIn = () => {
   const [name, setname] = useState();
@@ -8,23 +14,83 @@ const SignIn = () => {
   const [pic, setpic] = useState();
   const [confirmedPassword, setconfirmedPassword] = useState();
   const [show, setshow] = useState(false);
+  const [loading, setloading] = useState(false);
+  const [toast, settoast] = useState(false);
+  const [showA, setShowA] = useState(true);
+
+  // Function
+  const toggleShowA = () => setShowA(!showA);
+  const setProfile = (pics) => {
+    if (pics === "undefined") settoast(true);
+    if (pics.type === "image/jpeg" || pics.type === "image/jpg") {
+      setloading(true);
+      settoast(false);
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "nakama");
+      data.append("cloud_name", "dbmgwlkte");
+      fetch("https://api.cloudinary.com/v1_1/dbmgwlkte/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((result) => result.json())
+        .then((data) => {
+          setloading(false);
+          const picture = data.url.toString();
+          console.log(picture);
+          setpic(picture);
+          console.log(pic);
+        })
+        .catch((error) => {
+          console.log(error);
+          setloading(false);
+        });
+    } else {
+      settoast(true);
+    }
+  };
 
   return (
-    <Container className="mt-3">
+    // Form
+    <Container fluid className="mt-2">
+      {/* Toast */}
+      {toast && (
+        <ToastContainer className="p-3" position="bottom-center">
+          <Toast
+            show={showA}
+            onClose={toggleShowA}
+            className="bg-danger text-white"
+          >
+            <Toast.Header>
+              <strong className="me-auto">Warning</strong>
+              <small>11 mins ago</small>
+            </Toast.Header>
+            <Toast.Body>
+              Woohoo, you're reading this text in a Toast!
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
+      {/* Form */}
       <Form>
-        <Form.Group className="mb-3" controlId="formBasicName">
+        <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>
-          <Form.Control type="text" placeholder="Name" />
+          <Form.Control
+            type="text"
+            placeholder="Name"
+            required
+            onChange={(e) => setname(e.target.value)}
+          />
         </Form.Group>
 
         {/* Email */}
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
             placeholder="Enter email"
             required
-            onChange={(e) => setname(e.target.value)}
+            onChange={(e) => setemail(e.target.value)}
           />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
@@ -33,7 +99,7 @@ const SignIn = () => {
 
         {/* password */}
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
           <div className="d-flex">
             <Form.Control
@@ -55,7 +121,7 @@ const SignIn = () => {
           </div>
         </Form.Group>
         {/* Confirm password */}
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3">
           <Form.Label>Confirmed Password</Form.Label>
           <div className="d-flex">
             <Form.Control
@@ -82,15 +148,16 @@ const SignIn = () => {
           <Form.Control
             type="file"
             accept="image/*"
-            onChange={(e) => setpic(e.target.file[0])}
+            onChange={(e) => {
+              setProfile(e.target.files[0]);
+            }}
           />
         </Form.Group>
 
         <Button
-          variant="primary"
           type="submit"
           style={{ width: "100%" }}
-          className="my-3"
+          className={`my-3 ${loading ? "disabled" : "bg-primary"}`}
         >
           Sign-in
         </Button>

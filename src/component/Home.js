@@ -7,7 +7,7 @@ const Home = () => {
   // state
 
   return (
-    <Container fluid="md" className="pt-3">
+    <Container fluid className="pt-3">
       <h1 className="d-flex justify-content-center align-items-center bg-light">
         Nakama
       </h1>

@@ -5,11 +5,12 @@ const Login = () => {
   const [email, setemail] = useState();
   const [password, setpassword] = useState();
   const [show, setshow] = useState(false);
+  const [loading, setloading] = useState(false);
   return (
-    <Container className="mt-3">
+    <Container fluid className="mt-2">
       <Form>
         {/* Email */}
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" required />
           <Form.Text className="text-muted">
@@ -19,7 +20,7 @@ const Login = () => {
 
         {/* password */}
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
           <div className="d-flex">
             <Form.Control
@@ -42,10 +43,9 @@ const Login = () => {
         </Form.Group>
 
         <Button
-          variant="primary"
           type="submit"
           style={{ width: "100%" }}
-          className="my-3"
+          className={`my-3 ${loading ? "bg-primary" : "disabled"}`}
         >
           Login
         </Button>
