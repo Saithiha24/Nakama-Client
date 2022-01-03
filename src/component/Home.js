@@ -7,13 +7,13 @@ const Home = () => {
   // state
 
   return (
-    <Container fluid className="pt-3">
+    <Container fluid="sm" className="pt-3">
       <h1 className="d-flex justify-content-center align-items-center bg-light">
         Nakama
       </h1>
-      <Card className="my-3 p-5">
+      <Card className="my-3 px-md-5">
         <Card.Body>
-          <Tab.Container defaultActiveKey="first" bg="light">
+          <Tab.Container fluid="sm" defaultActiveKey="first" bg="light">
             <Row>
               <Col>
                 <Nav variant="pills" className="d-flex">

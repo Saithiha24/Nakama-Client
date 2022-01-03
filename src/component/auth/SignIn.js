@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {
-  Container,
-  Form,
-  Button,
-  Toast,
-  ToastContainer,
-} from "react-bootstrap";
+import { Form, Button, Toast, ToastContainer } from "react-bootstrap";
 
 const SignIn = () => {
   const [name, setname] = useState();
@@ -16,45 +10,61 @@ const SignIn = () => {
   const [confirmedPassword, setconfirmedPassword] = useState();
   const [show, setshow] = useState(false);
   const [loading, setloading] = useState(false);
-  const [toast, settoast] = useState(false);
-  const [showA, setShowA] = useState(true);
-  const [showB, setshowB] = useState(true);
-  const [pwToast, setpwToast] = useState(false);
+  // toast
+  const [showA, setShowA] = useState(false);
+  const [showB, setshowB] = useState(false);
+  const [showC, setshowC] = useState(false);
+
   // Function
   const toggleShowA = () => setShowA(!showA);
   const toggleShowB = () => setshowB(!showB);
+  const toggleShowC = () => setshowC(!showC);
   const submitHandler = async (e) => {
     e.preventDefault();
     setloading(true);
+    if (!name || !email || !password) {
+      toggleShowC();
+      setloading(false);
+      return;
+    }
     if (password !== confirmedPassword) {
       setloading(false);
-      setpwToast(true);
-    }
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const url = "http://localhost:5000/api/auth/signin";
-      const { data } = axios.post(
-        url,
-        {
-          name,
-          email,
-          password,
-          pic,
-        },
-        config
-      );
-      console.log(data);
-    } catch {}
+      toggleShowB();
+      return;
+    } else
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
+        const url = "http://localhost:5000/api/auth/signin";
+        const { data } = await axios.post(
+          url,
+          {
+            name,
+            email,
+            password,
+            pic,
+          },
+          config
+        );
+        console.log(data);
+        setloading(false);
+      } catch (error) {
+        setloading(error);
+        console.log(error);
+      }
   };
   const setProfile = (pics) => {
-    if (pics === "undefined") settoast(true);
+    if (pics === "undefined") {
+      toggleShowA();
+      setloading(false);
+      return;
+    }
     if (pics.type === "image/jpeg" || pics.type === "image/jpg") {
       setloading(true);
-      settoast(false);
+      toggleShowA();
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "nakama");
@@ -74,57 +84,72 @@ const SignIn = () => {
           setloading(false);
         });
     } else {
-      settoast(true);
+      toggleShowA();
     }
   };
 
   return (
-    // Form
-    <Container fluid className="mt-2">
+    <div className="mt-2">
       {/* Toast */}
-      {toast && (
-        <ToastContainer className="p-3" position="bottom-center">
-          <Toast
-            show={showA}
-            onClose={toggleShowA}
-            className="bg-danger text-white"
-            autohide="false"
-            delay="3000"
-          >
-            <Toast.Header>
-              <strong className="me-auto">Warning</strong>
-              <small>11 mins ago</small>
-            </Toast.Header>
-            <Toast.Body>Please select a picture for profile</Toast.Body>
-          </Toast>
-        </ToastContainer>
-      )}
+
+      <ToastContainer className="p-3" position="top-center">
+        <Toast
+          show={showA}
+          onClose={toggleShowA}
+          className="bg-danger text-white"
+          autohide="false"
+          delay="3000"
+        >
+          <Toast.Header>
+            <strong className="me-auto">Warning</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Please select a picture for profile</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       {/* Password Toast */}
-      {pwToast && (
-        <ToastContainer className="p-3" position="bottom-center">
-          <Toast
-            show={showB}
-            onClose={toggleShowB}
-            className="bg-danger text-white"
-            autohide="false"
-            delay="3000"
-          >
-            <Toast.Header>
-              <strong className="me-auto">Warning</strong>
-              <small>11 mins ago</small>
-            </Toast.Header>
-            <Toast.Body>Passwords don't match</Toast.Body>
-          </Toast>
-        </ToastContainer>
-      )}
+
+      <ToastContainer className="p-3" position="top-center">
+        <Toast
+          show={showB}
+          onClose={toggleShowB}
+          className="bg-danger text-white"
+          autohide="false"
+          delay="3000"
+        >
+          <Toast.Header>
+            <strong className="me-auto">Warning</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Passwords don't match</Toast.Body>
+        </Toast>
+      </ToastContainer>
+      {/* ShowAlert for input value */}
+      <ToastContainer className="p-3" position="top-center">
+        <Toast
+          show={showC}
+          onClose={toggleShowC}
+          className="bg-danger text-white"
+          autohide="false"
+          delay="3000"
+        >
+          <Toast.Header>
+            <strong className="me-auto">Warning</strong>
+            <small>11 mins ago</small>
+          </Toast.Header>
+          <Toast.Body>Please fill all the fields</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       {/* Form */}
+      {/* Name */}
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Name"
-            required
             onChange={(e) => setname(e.target.value)}
           />
         </Form.Group>
@@ -135,7 +160,6 @@ const SignIn = () => {
           <Form.Control
             type="email"
             placeholder="Enter email"
-            required
             onChange={(e) => setemail(e.target.value)}
           />
           <Form.Text className="text-muted">
@@ -150,7 +174,6 @@ const SignIn = () => {
           <div className="d-flex">
             <Form.Control
               type={show ? "text" : "password"}
-              required
               onChange={(e) => setpassword(e.target.value)}
             />
             <Button
@@ -172,7 +195,6 @@ const SignIn = () => {
           <div className="d-flex">
             <Form.Control
               type={show ? "text" : "password"}
-              required
               onChange={(e) => setconfirmedPassword(e.target.value)}
             />
             <Button
@@ -208,7 +230,7 @@ const SignIn = () => {
           Sign-in
         </Button>
       </Form>
-    </Container>
+    </div>
   );
 };
 
