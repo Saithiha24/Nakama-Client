@@ -10,26 +10,31 @@ const SignIn = () => {
   const [confirmedPassword, setconfirmedPassword] = useState();
   const [show, setshow] = useState(false);
   const [loading, setloading] = useState(false);
-  // toast
-  const [showA, setShowA] = useState(false);
-  const [showB, setshowB] = useState(false);
-  const [showC, setshowC] = useState(false);
 
+  // toast
+
+  const [toastBg, settoastBg] = useState();
+  const [toastBody, settoastBody] = useState();
+  const [showToast, setshowToast] = useState(false);
   // Function
-  const toggleShowA = () => setShowA(!showA);
-  const toggleShowB = () => setshowB(!showB);
-  const toggleShowC = () => setshowC(!showC);
+  const toggleToast = () => setshowToast(!showToast);
+  const alertToast = (toastbg, toastBody) => {
+    settoastBg(toastbg);
+    settoastBody(toastBody);
+  };
   const submitHandler = async (e) => {
     e.preventDefault();
     setloading(true);
     if (!name || !email || !password) {
-      toggleShowC();
+      toggleToast();
+      alertToast("danger", "Please fill all the fields");
       setloading(false);
       return;
     }
     if (password !== confirmedPassword) {
       setloading(false);
-      toggleShowB();
+      toggleToast();
+      alertToast("danger", "Passwords don't match");
       return;
     } else
       try {
@@ -51,20 +56,27 @@ const SignIn = () => {
         );
         console.log(data);
         setloading(false);
+        toggleToast();
+        alertToast("success", "Signin successfully");
       } catch (error) {
-        setloading(error);
+        setloading(false);
+        toggleToast();
+        alertToast("danger", "Signin failed");
         console.log(error);
       }
   };
+  // For profile picture
   const setProfile = (pics) => {
     if (pics === "undefined") {
-      toggleShowA();
+      toggleToast();
+      alertToast("danger", "please select the profile picture");
       setloading(false);
       return;
     }
     if (pics.type === "image/jpeg" || pics.type === "image/jpg") {
       setloading(true);
-      toggleShowA();
+      toggleToast();
+      alertToast("danger", "please select the profile picture");
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "nakama");
@@ -78,70 +90,37 @@ const SignIn = () => {
           setloading(false);
           const picture = data.url.toString();
           setpic(picture);
+          showToast();
+          alertToast("success", "SignIn successfully");
         })
         .catch((error) => {
           console.log(error);
           setloading(false);
         });
     } else {
-      toggleShowA();
+      toggleToast();
+      alertToast("success", "You select the profile picture");
     }
   };
 
   return (
     <div className="mt-2">
-      {/* Toast */}
-
+      {/* dynamic toast*/}
       <ToastContainer className="p-3" position="top-center">
         <Toast
-          show={showA}
-          onClose={toggleShowA}
-          className="bg-danger text-white"
+          show={showToast}
+          onClose={toggleToast}
+          className={`bg-${toastBg} text-white`}
           autohide="false"
-          delay="3000"
+          delay="2000"
         >
           <Toast.Header>
             <strong className="me-auto">Warning</strong>
-            <small>11 mins ago</small>
+            <small>1s ago</small>
           </Toast.Header>
-          <Toast.Body>Please select a picture for profile</Toast.Body>
+          <Toast.Body>{toastBody}</Toast.Body>
         </Toast>
       </ToastContainer>
-
-      {/* Password Toast */}
-
-      <ToastContainer className="p-3" position="top-center">
-        <Toast
-          show={showB}
-          onClose={toggleShowB}
-          className="bg-danger text-white"
-          autohide="false"
-          delay="3000"
-        >
-          <Toast.Header>
-            <strong className="me-auto">Warning</strong>
-            <small>11 mins ago</small>
-          </Toast.Header>
-          <Toast.Body>Passwords don't match</Toast.Body>
-        </Toast>
-      </ToastContainer>
-      {/* ShowAlert for input value */}
-      <ToastContainer className="p-3" position="top-center">
-        <Toast
-          show={showC}
-          onClose={toggleShowC}
-          className="bg-danger text-white"
-          autohide="false"
-          delay="3000"
-        >
-          <Toast.Header>
-            <strong className="me-auto">Warning</strong>
-            <small>11 mins ago</small>
-          </Toast.Header>
-          <Toast.Body>Please fill all the fields</Toast.Body>
-        </Toast>
-      </ToastContainer>
-
       {/* Form */}
       {/* Name */}
       <Form onSubmit={submitHandler}>

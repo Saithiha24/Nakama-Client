@@ -8,14 +8,23 @@ const Login = () => {
   const [show, setshow] = useState(false);
   const [loading, setloading] = useState(false);
   // Toast
-  const [showC, setshowC] = useState(false);
+  const [toastBg, settoastBg] = useState();
+  const [toastBody, settoastBody] = useState();
+  const [showToast, setshowToast] = useState(false);
   // Function
-  const toggleShowC = () => setshowC(!showC);
+  const toggleToast = () => setshowToast(!showToast);
+  const alertToast = (toastbg, toastBody) => {
+    settoastBg(toastbg);
+    settoastBody(toastBody);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     setloading(true);
     if (!email || !password) {
       setloading(false);
+      toggleToast();
+      alertToast("danger", "Please fill all the fields");
       return;
     } else
       try {
@@ -35,30 +44,34 @@ const Login = () => {
         );
         console.log(data);
         setloading(false);
+        toggleToast();
+        alertToast("success", "login successfully");
       } catch (error) {
         setloading(error);
         console.log(error);
+        toggleToast();
+        alertToast("danger", "login failed");
       }
   };
   return (
     <div className="mt-2">
       {/* ShowAlert for input value */}
+      {/* dynamic toast*/}
       <ToastContainer className="p-3" position="top-center">
         <Toast
-          show={showC}
-          onClose={toggleShowC}
-          className="bg-danger text-white"
+          show={showToast}
+          onClose={toggleToast}
+          className={`bg-${toastBg} text-white`}
           autohide="false"
-          delay="3000"
+          delay="2000"
         >
           <Toast.Header>
             <strong className="me-auto">Warning</strong>
-            <small>11 mins ago</small>
+            <small>1s ago</small>
           </Toast.Header>
-          <Toast.Body>Please fill all the fields</Toast.Body>
+          <Toast.Body>{toastBody}</Toast.Body>
         </Toast>
       </ToastContainer>
-
       <Form onSubmit={submitHandler}>
         {/* Email */}
         <Form.Group className="mb-3">
