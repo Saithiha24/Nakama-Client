@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button, Toast, ToastContainer } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setemail] = useState();
   const [password, setpassword] = useState();
   const [show, setshow] = useState(false);
@@ -33,7 +35,7 @@ const Login = () => {
             "Content-type": "application/json",
           },
         };
-        const url = "http://localhost:5000/api/auth/signin";
+        const url = "http://localhost:5000/api/auth/login";
         const { data } = await axios.post(
           url,
           {
@@ -46,8 +48,9 @@ const Login = () => {
         setloading(false);
         toggleToast();
         alertToast("success", "login successfully");
+        navigate("/chat");
       } catch (error) {
-        setloading(error);
+        setloading(false);
         console.log(error);
         toggleToast();
         alertToast("danger", "login failed");
@@ -76,7 +79,11 @@ const Login = () => {
         {/* Email */}
         <Form.Group className="mb-3">
           <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
+          <Form.Control
+            type="email"
+            placeholder="Enter email"
+            onChange={(e) => setemail(e.target.value)}
+          />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
           </Form.Text>
@@ -116,7 +123,7 @@ const Login = () => {
           variant="danger"
           type="submit"
           style={{ width: "100%" }}
-          onSubmit={() => {
+          onClick={() => {
             setemail("guest@example.com");
             setpassword("12345678");
           }}

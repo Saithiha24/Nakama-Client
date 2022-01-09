@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button, Toast, ToastContainer } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [name, setname] = useState();
@@ -10,7 +11,8 @@ const SignIn = () => {
   const [confirmedPassword, setconfirmedPassword] = useState();
   const [show, setshow] = useState(false);
   const [loading, setloading] = useState(false);
-
+  //  Navigate
+  const navigate = useNavigate();
   // toast
 
   const [toastBg, settoastBg] = useState();
@@ -58,6 +60,7 @@ const SignIn = () => {
         setloading(false);
         toggleToast();
         alertToast("success", "Signin successfully");
+        navigate("/chat");
       } catch (error) {
         setloading(false);
         toggleToast();
@@ -68,15 +71,11 @@ const SignIn = () => {
   // For profile picture
   const setProfile = (pics) => {
     if (pics === "undefined") {
-      toggleToast();
-      alertToast("danger", "please select the profile picture");
       setloading(false);
       return;
     }
     if (pics.type === "image/jpeg" || pics.type === "image/jpg") {
       setloading(true);
-      toggleToast();
-      alertToast("danger", "please select the profile picture");
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "nakama");
@@ -90,16 +89,13 @@ const SignIn = () => {
           setloading(false);
           const picture = data.url.toString();
           setpic(picture);
-          showToast();
-          alertToast("success", "SignIn successfully");
+          toggleToast();
+          alertToast("success", "You select the profile picture");
         })
         .catch((error) => {
           console.log(error);
           setloading(false);
         });
-    } else {
-      toggleToast();
-      alertToast("success", "You select the profile picture");
     }
   };
 
