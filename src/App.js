@@ -3,17 +3,18 @@ import React from "react";
 import Home from "./component/Home";
 import Chat from "./component/chat/Chat";
 import "./App.css";
+import ChatProvider from "./Context/ChatProvider";
 
 const App = () => {
   return (
-    <div className="App">
-      <Router>
+    <Router>
+      <ChatProvider>
         <Routes>
           <Route path="/" exact element={<Home />} />
           <Route path="/chat" element={<Chat />} />
         </Routes>
-      </Router>
-    </div>
+      </ChatProvider>
+    </Router>
   );
 };
 

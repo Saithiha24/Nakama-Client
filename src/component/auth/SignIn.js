@@ -56,7 +56,7 @@ const SignIn = () => {
           },
           config
         );
-        console.log(data);
+        localStorage.setItem("userInfo", JSON.stringify(data));
         setloading(false);
         toggleToast();
         alertToast("success", "Signin successfully");

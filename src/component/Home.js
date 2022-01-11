@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Container, Tab, Col, Nav, Row, Card } from "react-bootstrap";
 import SignIn from "./auth/SignIn";
 import Login from "./auth/Login";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  // state
+  const navigate = useNavigate();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+    if (user) navigate("/chat");
+  }, [navigate]);
 
   return (
     <Container fluid="sm" className="pt-3">
