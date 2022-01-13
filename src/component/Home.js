@@ -3,12 +3,15 @@ import { Container, Tab, Col, Nav, Row, Card } from "react-bootstrap";
 import SignIn from "./auth/SignIn";
 import Login from "./auth/Login";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
     if (user) navigate("/chat");
+    if (!user) navigate("/");
   }, [navigate]);
 
   return (
