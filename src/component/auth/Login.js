@@ -49,6 +49,7 @@ const Login = () => {
         toggleToast();
         alertToast("success", "login successfully");
         navigate("/chat");
+        return;
       } catch (error) {
         setloading(false);
         console.log(error);

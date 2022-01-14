@@ -1,11 +1,34 @@
-import { Avatar, Button, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Modal,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import { useNavigate } from "react-router-dom";
+import { User } from "../redux/UserSlice";
 
 const MenuProfile = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [modalOpen, setmodalOpen] = useState(false);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
+  const userInfo = useSelector(User);
+  const userProfile = userInfo.user;
+
+  console.log({ userInfo, userProfile });
+
+  const modalOpenHandler = () => {
+    handleClose();
+    setmodalOpen(true);
+  };
+  const modalCloseHandler = () => setmodalOpen(false);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -13,9 +36,9 @@ const MenuProfile = () => {
     setAnchorEl(null);
   };
   const logoutHandler = () => {
-    localStorage.removeItem("useInfo");
-    navigate("/");
     handleClose();
+    localStorage.removeItem("userInfo");
+    navigate("/");
   };
   return (
     <div>
@@ -27,7 +50,10 @@ const MenuProfile = () => {
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <Avatar
+          alt="Remy Sharp"
+          // src={userProfile.pic}
+        />
       </Button>
       <Menu
         id="basic-menu"
@@ -38,10 +64,40 @@ const MenuProfile = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={modalOpenHandler}>Profile</MenuItem>
         <MenuItem onClick={logoutHandler}>Logout</MenuItem>
       </Menu>
+
+      {/* Model */}
+      <Modal
+        className="d-flex justify-content-center align-items-center"
+        open={modalOpen}
+        onClose={modalCloseHandler}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="bg-white p-3">
+          <Typography
+            id="modal-modal-title"
+            variant="h3"
+            component="h2"
+            className="d-flex justify-content-center align-items-center mb-2"
+          >
+            {userProfile.name}
+          </Typography>
+          <div className="d-flex justify-content-center align-items-center mb-2">
+            <Avatar
+              alt="Remy Sharp"
+              // src={userProfile.pic}
+              style={{ width: 100, height: 100 }}
+            />
+          </div>
+
+          <Typography variant="h5" id="modal-modal-description">
+            {userProfile.email}
+          </Typography>
+        </Box>
+      </Modal>
     </div>
   );
 };

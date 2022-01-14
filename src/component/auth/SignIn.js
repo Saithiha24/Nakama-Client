@@ -61,6 +61,7 @@ const SignIn = () => {
         toggleToast();
         alertToast("success", "Signin successfully");
         navigate("/chat");
+        return;
       } catch (error) {
         setloading(false);
         toggleToast();
