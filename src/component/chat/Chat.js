@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Box } from "@mui/material";
 import ChatList from "../../ChatRoom/ChatList";
 import GroupChat from "../../ChatRoom/GroupChat";
 import NavBar from "../../ChatRoom/NavBar";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../redux/UserSlice";
 import { useNavigate } from "react-router-dom";
+import { Col, Row } from "react-bootstrap";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -21,10 +21,14 @@ const Chat = () => {
   return (
     <div style={{ width: "100%" }}>
       <NavBar />
-      <Box className="d-flex">
-        <ChatList />
-        <GroupChat />
-      </Box>
+      <Row>
+        <Col xs={4}>
+          <ChatList />
+        </Col>
+        <Col xs={8}>
+          <GroupChat />
+        </Col>
+      </Row>
     </div>
   );
 };
