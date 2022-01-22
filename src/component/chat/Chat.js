@@ -13,7 +13,6 @@ const Chat = () => {
   useEffect(() => {
     const restoreData = () => {
       const user = JSON.parse(localStorage.getItem("userInfo"));
-      console.log(user);
       if (user) dispatch(getUser(user));
       if (!user) navigate("/");
     };
