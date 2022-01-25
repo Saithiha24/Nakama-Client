@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import ChatListSkeleton from "./ChatListSkeleton";
 
 const MyChat = () => {
-  const [chatList, setChatList] = useState();
+  // const [chatList, setChatList] = useState();
 
   return (
     <div className="mt-3">
@@ -14,15 +14,15 @@ const MyChat = () => {
           <p>Create Group Chat +</p>
         </div>
         <section>
-          {chatList ? (
+          {/* {chatList ? (
             <div>
               {chatList.map((user) => (
                 <div key={user._id}>Hello</div>
               ))}
             </div>
-          ) : (
-            <ChatListSkeleton />
-          )}
+          ) : ( */}
+          <ChatListSkeleton />
+          {/* )} */}
         </section>
       </Container>
     </div>
