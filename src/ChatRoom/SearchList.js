@@ -1,6 +1,6 @@
-import { Avatar, List, ListItem, Stack } from "@mui/material";
+import { Avatar, List, ListItem } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myChat, UserList } from "../redux/UserSlice";
 

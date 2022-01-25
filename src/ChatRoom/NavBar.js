@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import MenuProfile from "./MenuProfile";
 import { Toast, ToastContainer } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { chatUsersList, User, UserList } from "../redux/UserSlice";
+import { chatUsersList, User } from "../redux/UserSlice";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import SearchList from "./SearchList";
