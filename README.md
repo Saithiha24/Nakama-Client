@@ -8,4 +8,4 @@ react-router-dom
 
 
 Website Link
-https://priceless-morse-c34d4d.netlify.app/
+https://nakamas.netlify.app/
