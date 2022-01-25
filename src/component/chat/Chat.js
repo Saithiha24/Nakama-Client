@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import ChatList from "../../ChatRoom/ChatList";
+import ChatList from "../../ChatRoom/MyChat";
 import GroupChat from "../../ChatRoom/GroupChat";
 import NavBar from "../../ChatRoom/NavBar";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../redux/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
+import { Container } from "@mui/material";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const Chat = () => {
     restoreData();
   }, [dispatch, navigate]);
   return (
-    <div style={{ width: "100%" }}>
+    <section style={{ width: "100%", overflow: "hidden" }}>
       <NavBar />
       <Row>
         <Col xs={4}>
@@ -29,7 +30,7 @@ const Chat = () => {
           <GroupChat />
         </Col>
       </Row>
-    </div>
+    </section>
   );
 };
 

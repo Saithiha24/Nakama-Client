@@ -1,28 +1,16 @@
-import { Box, Container, Modal } from "@mui/material";
+import { Container } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { User } from "../redux/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { myChat, User } from "../redux/UserSlice";
 import ChatListSkeleton from "./ChatListSkeleton";
 
-const ChatList = () => {
+const MyChat = () => {
   const [chatList, setChatList] = useState();
-  useEffect(() => {
-    fetchChat();
-  }, []);
-
+  const dispatch = useDispatch();
   const user = useSelector(User);
   const token = user.token;
-  const fetchChat = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const { data } = await axios.get("http://localhost:5000/api/chat", config);
-    setChatList(data);
-    console.log(data);
-  };
+
   return (
     <div className="mt-3">
       <Container>
@@ -34,7 +22,7 @@ const ChatList = () => {
           {chatList ? (
             <div>
               {chatList.map((user) => (
-                <div></div>
+                <div key={user._id}>Hello</div>
               ))}
             </div>
           ) : (
@@ -46,4 +34,4 @@ const ChatList = () => {
   );
 };
 
-export default ChatList;
+export default MyChat;

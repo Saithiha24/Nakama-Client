@@ -106,7 +106,15 @@ const NavBar = () => {
               <Search />
             </IconButton>
           </form>
-          {loading ? <ChatLoading /> : <SearchList />}
+          {loading ? (
+            <ChatLoading />
+          ) : (
+            <SearchList
+              token={token}
+              toggleToast={toggleToast}
+              alertToast={alertToast}
+            />
+          )}
         </Box>
         {/* Toast */}
         <ToastContainer className="p-3" position="top-center">
