@@ -1,8 +1,6 @@
 import { Container } from "@mui/material";
 
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { User } from "../redux/UserSlice";
 import ChatListSkeleton from "./ChatListSkeleton";
 
 const MyChat = () => {
