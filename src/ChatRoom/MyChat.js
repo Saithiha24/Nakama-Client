@@ -1,6 +1,4 @@
-import { Container } from "@mui/material";
-
-import React, { useState } from "react";
+import React from "react";
 import ChatListSkeleton from "./ChatListSkeleton";
 
 const MyChat = () => {
@@ -8,7 +6,7 @@ const MyChat = () => {
 
   return (
     <div className="mt-3">
-      <Container>
+      <div>
         <div className="d-flex justify-content-between align-items-center">
           <h3>ChatList</h3>
           <p>Create Group Chat +</p>
@@ -24,7 +22,7 @@ const MyChat = () => {
           <ChatListSkeleton />
           {/* )} */}
         </section>
-      </Container>
+      </div>
     </div>
   );
 };
