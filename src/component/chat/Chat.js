@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { getUser } from "../../redux/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
-import { Container } from "@mui/material";
 
 const Chat = () => {
   const dispatch = useDispatch();
